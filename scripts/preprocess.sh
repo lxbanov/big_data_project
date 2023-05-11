@@ -15,8 +15,6 @@ if [ ! -f "postgresql-42.6.0.jar" ]; then
 	cp  postgresql-42.6.0.jar /usr/hdp/current/sqoop-client/lib/
 fi
 
-echo "Installed pandas"
-
 rm -f /var/lib/pgsql/data/pg_hba.conf
 cp ./config/pg_hba.conf /var/lib/pgsql/data/pg_hba.conf
 sudo systemctl restart postgresql
