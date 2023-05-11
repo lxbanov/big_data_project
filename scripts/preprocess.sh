@@ -2,13 +2,13 @@
 
 echo "Installing pip..."
 if [ ! -f "get-pip.py" ]; then 
-	wget https://bootstrap.pypa.io/pip/3.6/get-pip.py
-	python3.6 get-pip.py
+	wget https://bootstrap.pypa.io/pip/2.7/get-pip.py
+	python get-pip.py
 fi
 
 echo "Installed pip"
 
-pip3 install pandas
+pip install -r requirements.txt --ignore-installed
 
 if [ ! -f "postgresql-42.6.0.jar" ]; then
 	wget https://jdbc.postgresql.org/download/postgresql-42.6.0.jar --no-check-certificate
@@ -28,5 +28,5 @@ fi
 
 echo "Data is ready to be preprocessed"
 
-python3.6 /root/big_data_project/scripts/preprocess.py -i "./data/tsla_2019_2022.csv" -o "./data"
+python ./scripts/preprocess.py -i "./data/tsla_2019_2022.csv" -o "./data"
 echo "Data is processed"

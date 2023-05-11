@@ -9,9 +9,13 @@ psql -U postgres -d project -f "$(pwd)/sql/db.sql"
 hdfs dfs -rm -r /project
 # hdfs dfs -mkdir /project
 # rm -rf ./avsc
+if [ -d "$(pwd)/avsc" ]; then
+	rm -rf $(pwd)/avsc
+fi
 
 sqoop import-all-tables \
     -Dmapreduce.job.user.classpath.first=true \
+    -Dmapreduce.map.memory.mb=4096 \
     --connect jdbc:postgresql://localhost/project \
     --username postgres \
     --warehouse-dir /project \

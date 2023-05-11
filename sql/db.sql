@@ -10,12 +10,6 @@ CREATE TABLE tesla_option_chain (
 	expire_date date,
 	expire_unix VARCHAR(50),
 	dte real,
-	c_delta real,
-	c_gamma real,
-	c_vega real,
-	c_theta real,
-	c_rho real,
-	c_iv real,
 	c_volume real,
 	c_last real,
 	c_size VARCHAR(50),
@@ -26,15 +20,7 @@ CREATE TABLE tesla_option_chain (
 	p_ask real,
 	p_size VARCHAR(50),
 	p_last real,
-	p_delta real,
-	p_gamma real,
-	p_vega real,
-	p_theta real,
-	p_rho real,
-	p_iv real,
-	p_volume real,
-	strike_distance real,
-	strike_distance_pct real
+	p_volume real
 );
 
 \COPY tesla_option_chain FROM './data/data.csv' DELIMITER ',' CSV HEADER NULL '';

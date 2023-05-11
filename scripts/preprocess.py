@@ -3,10 +3,14 @@ import os
 import logging
 import pandas as pd
 import numpy as np
+import datetime
+import time
 
-from typing import Dict
+dt = datetime.datetime(2020, 1, 1)
 
-def preprocess(data) -> Dict[str, pd.DataFrame]:
+timestamp = time.mktime(dt.timetuple())
+
+def preprocess(data):
     """Preprocess data to be loaded to database
 
     Args:
@@ -57,7 +61,31 @@ def preprocess(data) -> Dict[str, pd.DataFrame]:
         chunk = chunk[chunk.notna()]
         chunk = chunk[chunk.notnull()]
         chunk.columns = columns
+        chunk = chunk[chunk['q_unix_time'] >= timestamp]
         full_data = pd.concat([full_data, chunk], axis=0, join='inner', copy=False)
+
+    remained_columns = [
+        "q_unix_time",
+        "q_read_time",
+        "q_date",
+        "q_time_h",
+        "underlying_last",
+        "expire_date",
+        "expire_unix", 
+        "dte",
+        "c_volume",
+        "c_last",
+	"c_size",
+        "c_bid",
+        "c_ask",
+        "strike",
+	"p_bid",
+        "p_ask",
+        "p_size",
+        "p_last",
+        "p_volume",
+    ]
+    full_data = full_data[remained_columns]
     return {'data': full_data}
 
 
@@ -84,10 +112,10 @@ if __name__ == '__main__':
         )
 
     logger.info("Processing data...")
-    files = preprocess(pd.read_csv(args.i, chunksize=10**5, low_memory=False, na_values=['', ' ']))
+    files = preprocess(pd.read_csv(args.i, chunksize=10**5, low_memory=False, na_values=['', ' ', '\N']))
     for file_name, df in files.items():
-        logger.info(f"Saving {file_name}...")
-        df.to_csv(f'{os.path.join(args.o, file_name)}.csv', chunksize=10**5)
+        logger.info("Saving %s..."%file_name)
+        df.to_csv('%s.csv'%os.path.join(args.o, file_name), chunksize=10**5)
     logger.info("Done.")
     
     
