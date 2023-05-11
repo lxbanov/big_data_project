@@ -11,3 +11,6 @@ cat $(ls -v ./output/insight_3/*) >> ./output/insight_3.csv
 hive -f "./sql/insight4.hql"
 echo "num_options,lifetime_days" > './output/insight_4.csv'
 cat $(ls -v ./output/insight_4/*) >> ./output/insight_4.csv
+hive -f "./sql/insight5.hql"
+echo "avg_strike,lifetime_days" > './output/insight_5.csv'
+cat $(ls -v ./output/insight_5/*) >> ./output/insight_5.csv
