@@ -133,13 +133,13 @@ def main():
 
     st.subheader("Linear Regression")
 
-    # TODO: Explain
+    # Show the predictions of Linear Regression
 
     st.dataframe(lr_preds)
 
     st.subheader("Random Forest")
 
-    # TODO: Explain
+    # Show the predictions of Random Forest
 
     rf_preds = pd.read_csv("./output/rf_pred.csv")
     st.dataframe(rf_preds)

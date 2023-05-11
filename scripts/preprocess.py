@@ -10,6 +10,7 @@ dt = datetime.datetime(2020, 1, 1)
 
 timestamp = time.mktime(dt.timetuple())
 
+
 def preprocess(data):
     """Preprocess data to be loaded to database
 
@@ -38,17 +39,17 @@ def preprocess(data):
         "c_iv",
         "c_volume",
         "c_last",
-	"c_size",
+        "c_size",
         "c_bid",
         "c_ask",
         "strike",
-	"p_bid",
+        "p_bid",
         "p_ask",
         "p_size",
         "p_last",
         "p_delta",
         "p_gamma",
-	"p_vega",
+        "p_vega",
         "p_theta",
         "p_rho",
         "p_iv",
@@ -68,16 +69,15 @@ def preprocess(data):
         "q_unix_time",
         "q_time_h",
         "underlying_last",
-        #        "expire_date",
         "expire_unix", 
         "dte",
         "c_volume",
         "c_last",
-	"c_size",
+        "c_size",
         "c_bid",
         "c_ask",
         "strike",
-	"p_bid",
+        "p_bid",
         "p_ask",
         "p_size",
         "p_last",
@@ -115,8 +115,8 @@ if __name__ == '__main__':
     logger.info("Processing data...")
     files = preprocess(pd.read_csv(args.i, chunksize=10**5, low_memory=False, na_values=['', ' ', '\N']))
     for file_name, df in files.items():
-        logger.info("Saving %s..."%file_name)
-        df.to_csv('%s.csv'%os.path.join(args.o, file_name), chunksize=10**5)
+        logger.info("Saving %s..." % file_name)
+        df.to_csv('%s.csv' % os.path.join(args.o, file_name), chunksize=10**5)
     logger.info("Done.")
     
     
