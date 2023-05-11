@@ -66,11 +66,9 @@ def preprocess(data):
 
     remained_columns = [
         "q_unix_time",
-        "q_read_time",
-        "q_date",
         "q_time_h",
         "underlying_last",
-        "expire_date",
+        #        "expire_date",
         "expire_unix", 
         "dte",
         "c_volume",
@@ -86,6 +84,9 @@ def preprocess(data):
         "p_volume",
     ]
     full_data = full_data[remained_columns]
+    numerics = [x for x in remained_columns if x not in ['c_size', 'p_size']]
+    full_data[numerics] = full_data[numerics].apply(pd.to_numeric, errors='coerce')
+    full_data.dropna(inplace=True)
     return {'data': full_data}
 
 

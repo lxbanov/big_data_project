@@ -16,7 +16,7 @@ spark.sparkContext.setLogLevel('ERROR')
 tesla_option_chain = spark.read.format('avro').table('project.tesla_option_chain_opt')
 tesla_option_chain.createOrReplaceTempView('option_chain')
 
-features = ['q_unix_time', 'q_read_time', 'q_time_h', 'underlying_last', 'expire_date', 'expire_unix', 'dte', 'c_volume', 'c_last', 'c_bid', 'c_ask', 'p_bid', 'p_ask', 'p_volume', 'p_last']
+features = ['underlying_last','c_last', 'c_bid', 'c_ask', 'p_bid', 'p_ask', 'p_last']
 target = 'strike'
 
 assembler = ml.feature.VectorAssembler(inputCols=features, outputCol='features', handleInvalid='skip')
@@ -56,30 +56,30 @@ pred_lr.coalesce(1)\
         .option('header','true')\
         .csv('%s/output/lr_pred'%os.getcwd())
 
-# print('RMSE (Linear Regression): %s'%evaluator.evaluate(pred_lr))
+print('RMSE (Linear Regression): %f'%evaluator.evaluate(pred_lr))
 
-fm = ml.regression.FMRegressor(labelCol='strike', maxIter=10)
+rf = ml.regression.RandomForestRegressor(labelCol='strike')
 
-param_grid_fm = ml.tuning.ParamGridBuilder()\
-                .addGrid(fm.regParam, [0.1, 0.01])\
-                .addGrid(fm.fitIntercept, [True, False])\
+param_grid_rf = ml.tuning.ParamGridBuilder()\
+                .addGrid(rf.maxDepth, [3, 5])\
+                .addGrid(rf.numTrees, [4, 8, 16])\
                 .build()
-cv_fm = ml.tuning.CrossValidator(estimator=fm,
-                                estimatorParamMaps=param_grid_fm,
+cv_rf = ml.tuning.CrossValidator(estimator=rf,
+                                estimatorParamMaps=param_grid_rf,
                                 evaluator=evaluator,
                                 numFolds=3
                                 )
-model_fm = cv_fm.fit(train)
+model_rf = cv_rf.fit(train)
 
-pred_fm = model_fm.transform(test)
+pred_rf = model_rf.transform(test)
 
-pred_fm.coalesce(1)\
+pred_rf.coalesce(1)\
         .select('prediction', 'strike')\
         .write\
         .mode('overwrite')\
         .format('csv')\
         .option('sep', ',')\
         .option('header', 'true')\
-        .csv('%s/output/fm_pred'%os.getcwd())
+        .csv('%s/output/rf_pred'%os.getcwd())
 
-# print('RMSE (Factorization Machines): %s'%evaluator.evaluate(pred_fm))
+print('RMSE (Random Forest): %f'%evaluator.evaluate(pred_rf))

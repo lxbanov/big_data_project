@@ -3,12 +3,9 @@ START TRANSACTION;
 CREATE TABLE tesla_option_chain (
 	transaction_id integer NOT NULL PRIMARY KEY,
 	q_unix_time text,
-	q_read_time text,
-	q_date date,
 	q_time_h real,
 	underlying_last real,
-	expire_date date,
-	expire_unix VARCHAR(50),
+	expire_unix real,
 	dte real,
 	c_volume real,
 	c_last real,

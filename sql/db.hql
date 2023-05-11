@@ -26,11 +26,8 @@ DROP TABLE IF EXISTS tesla_option_chain_opt PURGE;
 CREATE EXTERNAL TABLE tesla_option_chain_opt (
 	transaction_id int,
 	q_unix_time bigint,
-	q_date bigint,
-	q_read_time bigint,
 	q_time_h float,
 	underlying_last float,
-	expire_date bigint,
 	expire_unix bigint,
 	dte float,
 	c_volume float,
